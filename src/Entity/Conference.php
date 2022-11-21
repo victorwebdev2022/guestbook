@@ -24,12 +24,17 @@ class Conference
     #[ORM\Column]
     private ?bool $isInternational = null;
 
-    #[ORM\OneToMany(mappedBy: 'conference', targetEntity: comment::class)]
+    #[ORM\OneToMany(mappedBy: 'conference', targetEntity: Comment::class)]
     private Collection $comments;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+    }
+    
+    public function __toString(): string
+    {
+        return $this->city.' '.$this->year;
     }
 
     public function getId(): ?int
@@ -81,7 +86,7 @@ class Conference
         return $this->comments;
     }
 
-    public function addComment(comment $comment): self
+    public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
@@ -91,7 +96,7 @@ class Conference
         return $this;
     }
 
-    public function removeComment(comment $comment): self
+    public function removeComment(Comment $comment): self
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
